@@ -6,20 +6,24 @@ import models.Transaction._
 
 object Application extends Controller {
 
-  def listTransaction = Action {
-    Ok(Json.toJson(transactions))
-  }
-
-  def saveTransaction = Action(BodyParsers.parse.json) { request =>
+  def saveTransaction(id: Long) = Action(BodyParsers.parse.json) { request =>
     val b = request.body.validate[Transaction]
     b.fold(
       errors => {
         BadRequest(Json.obj("status" -> "OK", "message" -> JsError.toFlatJson(errors)))
       },
       transaction => {
-        addTransaction(transaction)
+        addTransaction(Transaction(Option(id), transaction.parent_id, transaction.amount, transaction.types))
         Ok(Json.obj("status" -> "OK"))
       }
     )
+  }
+
+  def listTypes(types: String) = Action {
+    Ok(Json.toJson(transactions.filter(_.types == types).map(_.id.getOrElse(0).asInstanceOf[Long])))
+  }
+
+  def sumTransaction(id: Long) = Action {
+    Ok(Json.toJson(transactions))
   }
 }
