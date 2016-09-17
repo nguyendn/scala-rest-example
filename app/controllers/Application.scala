@@ -24,6 +24,6 @@ object Application extends Controller {
   }
 
   def sumTransaction(id: Long) = Action {
-    Ok(Json.toJson(transactions))
+    Ok(Json.obj("sum" -> transactions.filter(t => (t.id == Option(id) || t.parent_id == Option(id)) ).map(_.amount).sum))
   }
 }

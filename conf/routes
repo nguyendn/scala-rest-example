@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
-GET      /transactionservice/types/:types             controllers.Application.listTypes(types: String)
-GET      /transactionservice/sum/:id             controllers.Application.listTypes(id: Long)
-PUT     /transactionservice/:id                       controllers.Application.saveTransaction(id: Long)
+PUT     /transactionservice/:id                  controllers.Application.saveTransaction(id: Long)
+GET      /transactionservice/sum/:id             controllers.Application.sumTransaction(id: Long)
+GET      /transactionservice/types/:types        controllers.Application.listTypes(types: String)
+
