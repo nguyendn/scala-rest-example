@@ -13,10 +13,15 @@ object Application extends Controller {
         BadRequest(Json.obj("status" -> "OK", "message" -> JsError.toFlatJson(errors)))
       },
       transaction => {
-        addTransaction(Transaction(Option(id), transaction.parent_id, transaction.amount, transaction.types))
+        addTransaction(Transaction(Some(id), transaction.parentId, transaction.amount, transaction.types))
         Ok(Json.obj("status" -> "OK"))
       }
     )
+  }
+
+  def getTransaction(id: Long) = Action {
+    val transaction = transactions.filter(_.id == Option(id)).head
+    Ok(Json.obj("amount" -> transaction.amount, "types" -> transaction.types, "parentId" -> transaction.parentId))
   }
 
   def listTypes(types: String) = Action {
@@ -24,6 +29,6 @@ object Application extends Controller {
   }
 
   def sumTransaction(id: Long) = Action {
-    Ok(Json.obj("sum" -> transactions.filter(t => (t.id == Option(id) || t.parent_id == Option(id)) ).map(_.amount).sum))
+    Ok(Json.obj("sum" -> transactions.filter(t => (t.id == Option(id) || t.parentId == Option(id)) ).map(_.amount).sum))
   }
 }
