@@ -9,6 +9,11 @@ import play.api.test._
 class ApplicationSpec extends Specification {
 
   "Transaction Service" should {
+    "send 404 on a bad request" in new WithApplication {
+      val request = route(FakeRequest(PUT, "/transactionservice/1", FakeHeaders(), Json.obj("amount" -> 1))).get
+      status(request) must equalTo(BAD_REQUEST)
+    }
+
     "create a root transaction" in new WithApplication {
       val request = route(FakeRequest(PUT, "/transactionservice/1", FakeHeaders(), Json.obj("amount" -> 1, "types" -> "A"))).get
       status(request) must equalTo(OK)
